@@ -15,7 +15,7 @@
              [iop iyou])))
 
 (defmacro make-score-lookup
-  [mode]
+  [calc-fn]
   (flatten
    (list 'case 'line
     (for [a [\A \B \C]
@@ -23,14 +23,12 @@
           b [\X \Y \Z]
           :let [ib (- (int b) (int \X))]]
       (list (str a " " b)
-            (case mode
-              :play    (score-given-play ia ib)
-              :outcome (score-given-outcome ia ib)))))))
+            ((resolve calc-fn) ia ib))))))
 
 (time
  (let [plays (->> (slurp (io/resource "aoc22/day02.txt"))
                   (str/split-lines))]
    (println "p1 " (reduce (fn [curr line]
-                            (+ curr (make-score-lookup :play))) 0 plays))
+                            (+ curr (make-score-lookup score-given-play))) 0 plays))
    (println "p2 " (reduce (fn [curr line]
-                            (+ curr (make-score-lookup :outcome))) 0 plays))))
+                            (+ curr (make-score-lookup score-given-outcome))) 0 plays))))
