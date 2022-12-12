@@ -17,7 +17,7 @@
      (map #(first (apply clojure.set/intersection %)))
      (map char->val)
      (apply +))
-
+(range)
 ; p2
 (->> input
      (partition 3)
